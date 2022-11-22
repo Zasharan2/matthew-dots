@@ -64,9 +64,7 @@ for (i = 0; i < dotcount; i++) {
 
 avg = new point(0, 0); // average
 
-r = 0; // radius (dist from average) (user controlled)
-
-rc = 500; // randomness coefficient (user controlled)
+rc = 5; // randomness coefficient (user controlled)
 
 t = new point(200, 200); // target (user controlled)
 
@@ -110,16 +108,9 @@ function draw() {
         pointlist[i].x += (dx / dotcount);
         pointlist[i].y += (dy / dotcount);
 
-        // movement of points to radius
-        idx = pointlist[i].x - avg.x;
-        idy = pointlist[i].y - avg.y;
-
-        pointlist[i].x -= (idx * (1 - (r / (Math.sqrt((idx * idx) + (idy * idy)))))) / sm;
-        pointlist[i].y -= (idy * (1 - (r / (Math.sqrt((idx * idx) + (idy * idy)))))) / sm;
-
         // random movement
-        pointlist[i].x += rc * Math.pow(Math.random() - 0.5, 3);
-        pointlist[i].y += rc * Math.pow(Math.random() - 0.5, 3);
+        pointlist[i].x += rc * (Math.random() - 0.5);
+        pointlist[i].y += rc * (Math.random() - 0.5);
 
         // xy clamping
         if (pointlist[i].x < 0) {
