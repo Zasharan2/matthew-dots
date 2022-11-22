@@ -1,0 +1,57 @@
+#import <rand>
+
+class point() {
+    public:
+        int x, y;
+
+        point(px, py) {
+            x = px;
+            y = py;
+        }
+        ~point();
+}
+
+point[] pointlist;
+
+int tx, ty; // assume the user can somehow magically control these
+
+int dx, dy;
+
+int sm = 5; // smoothness
+
+point avg;
+
+int main() {
+    for (int i = 0; i < 20; i++) {
+        point p(rand(-10, 10), rand(-10, 10));
+        pointlist.append(p);
+    }
+
+    while(1) {
+        avg.x = 0;
+        avg.y = 0;
+
+        // average point x y calculation
+        for (int i = 0; i < 20; i++) {
+            avg.x += pointlist[i].x;
+            avg.y += pointlist[i].y;
+        }
+        avg.x /= 20;
+        avg.y /= 20;
+
+        // calculation of wanted movement
+        dx = (tx - avg.x) / sm;
+        dy = (ty - avg.y) / sm;
+
+        for (int i = 0; i < 20; i++) {
+            // each point moves towards target
+            pointlist[i].x += (dx / 20);
+            pointlist[i].y += (dy / 20);
+
+            // random movement
+            pointlist[i].x += random(-1, 1);
+            pointlist[i].y += random(-1, 1);
+        }
+    }
+
+}
