@@ -15,6 +15,15 @@ function globalKeyReleased(event){
     keyReleased(event);
 }
 
+keys = [];
+
+window.keyPressed = function(event){
+    keys[event.keyCode] = true;
+};
+window.keyReleased = function(event){
+    keys[event.keyCode] = false;
+};
+
 // mouse pos functions
 var mouseX;
 var mouseY;
@@ -69,6 +78,8 @@ rc = 5; // randomness coefficient (user controlled)
 t = new point(200, 200); // target (user controlled)
 
 sm = 5; // smoothness
+
+time = Date.now();
 
 function draw() {
     // set target to mouse
@@ -126,6 +137,40 @@ function draw() {
             pointlist[i].y = (ch - ps);
         }
     }
+
+    // user control of randomness
+    if (keys[65]) {
+        rc -= Math.log(rc + 1) * 0.01;
+    }
+    if (keys[68]) {
+        rc += Math.log(rc + 1) * 0.01;
+    }
+    if (rc < 0) {
+        rc = 0;
+    }
+    ctx.beginPath();
+    ctx.fillStyle = "rgba(0, 0, 0)";
+    ctx.font = "10px Arial";
+    ctx.fillText("Randomness: " + Math.round((rc + Number.EPSILON) * 100) / 100, 10, 20);
+
+    // user control of dot count
+    if (keys[87] && (Date.now() - time) > 250) {
+        pointlist.push(new point(mouseX, mouseY));
+        dotcount++;
+        time = Date.now();
+    }
+    if (keys[83] && (Date.now() - time) > 250) {
+        pointlist.pop();
+        dotcount--;
+        time = Date.now();
+    }
+    if (dotcount < 0) {
+        dotcount = 0;
+    }
+    ctx.beginPath();
+    ctx.fillStyle = "rgba(0, 0, 0)";
+    ctx.font = "10px Arial";
+    ctx.fillText("Dots: " + Math.round((dotcount + Number.EPSILON) * 100) / 100, 10, 40);
 }
 
 // loop
